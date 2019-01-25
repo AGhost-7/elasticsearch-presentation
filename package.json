@@ -1,0 +1,15 @@
+{
+  "name": "elasticsearch-presentation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "^1.11.0",
+    "reveal.js": "^3.7.0"
+  },
+  "scripts": {
+    "serve": "parcel serve --log-level 4 index.html",
+    "open": "xdg-open http://${DOCKED_VM_IP:-localhost}:1234",
+    "es": "docker-compose up -d && exec docker-compose exec elasticsearch bash"
+  }
+}

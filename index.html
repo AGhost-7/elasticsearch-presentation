@@ -1,0 +1,104 @@
+<html>
+	<!-- ey ronald ;) -->
+	<head>
+		<link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
+		<link rel="stylesheet" href="node_modules/reveal.js/css/theme/black.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Practical Elasticsearch</h1>
+				</section>
+
+				<section>
+					<h2>Intro</h2>
+					<ul>
+						<li>Basics of elasticsearch</li>
+						<li>Poking at the bear</li>
+						<li>Question(s)?</li>
+					</ul>
+					<p>
+						n.b. This is on Elasticsearch 6. Some of the samples may not work
+						on 1.7, but the core concepts still apply.
+					</p>
+				</section>
+
+				<section>
+					<h2>Basics</h2>
+					<p class="fragment">Everything's an array.</p>
+				</section>
+
+				<section>
+					<h2>How text is broken down</h2>
+					<p>
+						Elasticsearch makes use of certain concepts which can be tied back
+						to natural language processing concepts. An analyzer is composed
+						of the following:
+					</p>
+					<ul>
+						<li>Character filters: strip out unneeded text</li>
+						<li>Tokenizers: `string#split` of Elasticsearch</li>
+						<li>Token filters: Filter out text fragments</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Code samples</h2>
+				</section>
+
+				<section>
+					<p>Little bash shortcut:</p>
+					<pre><code>
+alias analyze="curl -H 'Content-Type: application/json' localhost:9200/_analyze?pretty --data"
+					</code></pre>
+				</section>
+
+				</section>
+				<section>
+					<p>
+						The "keyword" tokenizer doesn't do anything. It is useful for
+						situations where you want only exact matches.
+					</p>
+					<pre><code>
+analyze $'{
+  "tokenizer" : "keyword",
+  "text" : "hello world!"
+}'
+					</code></pre>
+				</section>
+
+				<section>
+					<p>
+						The "standard" tokenizer splits in a grammar-aware way. How it
+						works internally is actually a bit too complex to fit into this
+						talk. It is the default analyzer howerver:
+					</p>
+					<pre><code>
+analyze $'{
+	"tokenizer": "standard",
+	"text": "hello world!"
+}'
+					</code></pre>
+				</section>
+
+				<section>
+					<p>
+						There is a "lowercase" filter which, as the name suggests, makes
+						all of the letters lower case:
+					</p>
+
+					<pre><code>
+analyze $'{
+	"tokenizer": "keyword",
+	"filter": ["lowercase"],
+	"text": "AAaaaA aAAAaaaAA"
+}'
+					</pre></code>
+				</section>
+			</div>
+		</div>
+		<script src="./index.js">
+		</script>
+	</body>
+</html>
