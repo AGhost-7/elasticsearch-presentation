@@ -1,5 +1,27 @@
 # Elasticsearch presentation
 
+## Usage
+
+Install dependencies:
+```
+yarn
+```
+
+Start up the server:
+```
+yarn serve
+```
+
+Open the browser:
+```
+yarn open
+```
+
+Open elasticsearch:
+```
+yarn es
+```
+
 ## Presentation Outline
 - basic:
 	- everything's an array:
