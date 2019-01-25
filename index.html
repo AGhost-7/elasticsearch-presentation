@@ -11,6 +11,7 @@
 					<h1>Practical Elasticsearch</h1>
 				</section>
 
+				<!-- {{{ intro -->
 				<section>
 					<h2>Intro</h2>
 					<ul>
@@ -26,11 +27,16 @@
 					</small>
 				</section>
 
+				<!-- }}} -->
+
+				<!-- {{{ basics --->
+
 				<section>
 					<h2>Basics</h2>
-					<p class="fragment">Everything's an array.</p>
+					<p class="fragment">Everything is an array.</p>
 				</section>
 
+				<!-- {{{ write -->
 				<section>
 					<h2>How text is broken down</h2>
 					<p>
@@ -98,6 +104,155 @@ analyze $'{
 }'
 					</pre></code>
 				</section>
+
+				<!-- }}} -->
+
+				<!-- {{{ read -->
+				<section>
+					<h2>Search</h2>
+				</section>
+
+				<section>
+					<h2>Query vs Filter</h2>
+					<p class="fragment">
+						Queries are what we think about when it comes to searching data.
+						Matches are ranked and we can sort by the most relevant results.
+					</p>
+					<p class="fragment">
+						Filters are exact matches only. This is useful for building access
+						controls or for when a user wants to filter by an enumerable
+						property (e.g., dropdown value).
+					</p>
+					<aside class="notes">
+						Show search to explain dropdown value.
+					</aside>
+				</section>
+
+				<section>
+					<h2>Term queries</h2>
+					<p>Simplest query type.</p>
+					<span class="fragment">
+						<pre><code>
+{
+	"term": {
+		"name": "Jonathan Boudreau"
+	}
+}
+						</code></pre>
+					</span>
+
+					<span class="fragment">
+						<p>translates into:</p>
+						<pre><code>
+["Jonathan Boudreau"]
+						</code></pre>
+					</span>
+				</section>
+
+				<section>
+					<h2>Match queries</h2>
+					<p>Regular search query. Does full text search.</p>
+					<span class="fragment">
+						<pre><code>
+{
+	"match": {
+		"name": "Jonathan Boudreau"
+	}
+}
+						</code></pre>
+					</span>
+
+					<span class="fragment">
+						<p>translates to:</p>
+						<pre><code>
+["Jonathan", "Boudreau"]
+						</code></pre>
+					</span>
+				</section>
+
+				<section>
+					<h2>Pop quiz 🍭</h2>
+					<p>
+						Given a index containing a name field with the "standard"
+						analyzer, with the following documents:
+					</p>
+					<ul>
+						<li>Joe Pass</li>
+						<li>Joe Morello</li>
+						<li>Joe Bonamassa</li>
+					</ul>
+				</section>
+
+				<section>
+					<p>What results would you get if the following query is run?</p>
+					<pre><code>
+{
+	"term": {
+		"name": "Joe Pass"
+	}
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Solution</h2>
+				</section>
+
+				<section>
+					<p>Bash utility:</p>
+					<pre><code>
+es() { curl -H 'Content-Type: application/json' localhost:9200/$1?pretty "${@:2}" ; }
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Setup our index:</p>
+					<pre><code>
+es person -XPUT
+es person/_mapping/_doc -XPUT -d '{
+	"properties": {
+		"name": {
+			"type": "text"
+		}
+	}
+}'
+es person/_doc -d '{"name":"Joe Pass"}'
+es person/_doc -d '{"name":"Joe Morello"}'
+es person/_doc -d '{"name":"Joe Bonamassa"}'
+					</code></pre>
+				</section>
+
+				<section>
+					<p>Search:</p>
+					<pre><code>
+es person/_search -d '{
+	"query": {
+		"term": {
+			"name": "Joe Pass"
+		}
+	}
+}'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Bool Query</h2>
+					<p>Commonly used compound query. Some of the options include:</p>
+					<ul>
+						<li class="fragment">"must": Array of queries which must be true.</li>
+						<li class="fragment">
+							"should": Array of queries which could match. Minimum number of
+							matches can be configured. For filters, the minimum number of
+							matches is 1 by default. For queries, the minimum number of
+							matches is 0 (only affects rank).
+						</li>
+						<li class="fragment">"must_not": Opposite of "must".</li>
+					</ul>
+				</section>
+				<!-- }}} -->
+
+				<!-- }}} -->
+
 			</div>
 		</div>
 		<script src="./index.js">

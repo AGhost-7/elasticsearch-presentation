@@ -8,7 +8,7 @@
     "reveal.js": "^3.7.0"
   },
   "scripts": {
-    "serve": "parcel serve --log-level 4 index.html",
+    "serve": "parcel serve --no-hmr index.html",
     "open": "xdg-open http://${DOCKED_VM_IP:-localhost}:1234",
     "es": "docker-compose up -d && exec docker-compose exec elasticsearch bash"
   }
