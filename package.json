@@ -10,6 +10,6 @@
   "scripts": {
     "serve": "parcel serve --no-hmr index.html",
     "open": "xdg-open http://${DOCKED_VM_IP:-localhost}:1234",
-    "es": "docker-compose up -d && exec docker-compose exec elasticsearch bash"
+    "es": "exec docker-compose run shell bash"
   }
 }

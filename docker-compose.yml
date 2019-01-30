@@ -1,6 +1,11 @@
 version: '3.0'
 services:
-  elasticsearch: 
+  shell:
+    image: aghost7/ubuntu-dev-base:bionic
+    depends_on:
+      - elasticsearch
+    command: sleep Infinity
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
     environment:
       discovery.type: single-node
