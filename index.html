@@ -89,7 +89,7 @@ echo 'header = "Content-Type: application/json"' > ~/.curlrc
             situations where you want only exact matches.
           </p>
           <pre><code>
-curl elasticsearch:9200/_analize?pretty -d '{
+curl elasticsearch:9200/_analyze?pretty -d '{
   "tokenizer" : "keyword",
   "text" : "hello world!"
 }'
