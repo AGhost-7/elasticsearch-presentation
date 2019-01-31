@@ -1,3 +1,5 @@
 import Reveal from 'reveal.js'
 
-Reveal.initialize()
+Reveal.initialize({
+  transitionSpeed: 'fast'
+})

@@ -89,7 +89,7 @@ echo 'header = "Content-Type: application/json"' > ~/.curlrc
             situations where you want only exact matches.
           </p>
           <pre><code>
-curl elasticsearch:9200/_analize?pretty -d $'{
+curl elasticsearch:9200/_analize?pretty -d '{
   "tokenizer" : "keyword",
   "text" : "hello world!"
 }'
@@ -103,7 +103,7 @@ curl elasticsearch:9200/_analize?pretty -d $'{
             talk. It is the default analyzer howerver:
           </p>
           <pre><code>
-curl elasticsearch:9200/_analyze?pretty -d $'{
+curl elasticsearch:9200/_analyze?pretty -d '{
   "tokenizer": "standard",
   "text": "hello world!"
 }'
@@ -117,7 +117,7 @@ curl elasticsearch:9200/_analyze?pretty -d $'{
           </p>
 
           <pre><code>
-curl elasticsearch:9200/_analyze?pretty $'{
+curl elasticsearch:9200/_analyze?pretty '{
   "tokenizer": "keyword",
   "filter": ["lowercase"],
   "text": "AAaaaA aAAAaaaAA"
@@ -294,7 +294,7 @@ curl elasticsearch:9200/person/_search?pretty -d '{
             Checking elasticsearch mapping:
           </p>
           <code><pre>
-curl elasticsearch:9200/index/type/_mapping?pretty
+curl elasticsearch:9200/person/_mapping?pretty
           </pre></code>
           <aside class="notes">
             Show example with an app.
@@ -306,7 +306,7 @@ curl elasticsearch:9200/index/type/_mapping?pretty
             Checking what the analyzer does:
           </p>
           <code><pre>
-curl elasticsearch:9200/_analyze?pretty -d $'{
+curl elasticsearch:9200/_analyze?pretty -d '{
   "tokenizer": "standard",
   "text": "hello world !"
 }'
@@ -333,11 +333,19 @@ curl elasticsearch:9200/person/_doc/1?pretty
         <section>
           <p>Through search</p>
           <code><pre>
-curl elasticsearch:9200/person/_search?pretty -d $'{
+curl elasticsearch:9200/person/_search?pretty -d '{
   "query": {
     "match_all": {}
   }
 }'
+          </pre></code>
+        </section>
+
+        <section>
+          <p>Lucene shorthand</p>
+          <code><pre>
+curl 'elasticsearch:9200/person/_search?pretty&q=name:pass'
+          </pre></code>
         </section>
         <!-- }}} -->
 
@@ -368,24 +376,6 @@ sudo tcpdump -A -i any port 9200
           <aside class="notes">Pretty much always installed on machines.</aside>
         </section>
 
-        <section>
-          <p>tcpflow</p>
-          <code><pre>
-sudo tcpflow -C -S show_report=NO -g -i any port 9200
-          </pre></code>
-        </section>
-
-        <section>
-          <p>slowlog</p>
-          <code><pre>
-curl -XPUT elasticsearch:9200/person/_settings?pretty -d $'{
-  "index.search.slowlog.threshold.query.warn": "0ms",
-  "index.search.slowlog.threshold.fetch.warn": "0ms",
-  "index.indexing.slowlog.threshold.index.warn": "0ms",
-  "index.search.slowlog.level": "warn"
-}'
-          </pre></code>
-        </section>
 
         <section>
           <p>Try it out</p>
@@ -396,13 +386,31 @@ curl elasticsearch:9200/person/_search -d $'{
   }
 }'
           </pre></code>
+        </section>
 
+        <section>
+          <p>tcpflow</p>
+          <code><pre>
+sudo tcpflow -C -S show_report=NO -g -i any port 9200
+          </pre></code>
+        </section>
+
+        <section>
+          <p>slowlog</p>
+          <code><pre>
+curl -XPUT elasticsearch:9200/person/_settings?pretty -d '{
+  "index.search.slowlog.threshold.query.warn": "0ms",
+  "index.search.slowlog.threshold.fetch.warn": "0ms",
+  "index.indexing.slowlog.threshold.index.warn": "0ms",
+  "index.search.slowlog.level": "warn"
+}'
+          </pre></code>
         </section>
 
         <section>
           <p>n.b., don't forget to disable after you're done:</p>
           <code><pre>
-curl -XPUT elasticsearch:9200/person/_settings?pretty -d $'{
+curl -XPUT elasticsearch:9200/person/_settings?pretty -d '{
   "index.search.slowlog.threshold.query.trace": -1,
   "index.search.slowlog.threshold.query.info": -1,
   "index.search.slowlog.threshold.query.debug": -1,
