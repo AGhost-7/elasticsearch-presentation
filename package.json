@@ -10,6 +10,8 @@
   "scripts": {
     "serve": "parcel serve --no-hmr index.html",
     "open": "xdg-open http://${DOCKED_VM_IP:-localhost}:1234",
-    "es": "exec docker-compose run shell bash"
+    "es:up": "docker-compose pull && docker-compose up -d",
+    "es:shell": "exec docker-compose exec shell bash",
+    "es": "yarn es:up && yarn es:shell"
   }
 }
